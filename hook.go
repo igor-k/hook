@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"crypto/hmac"
 	"crypto/sha1"
 	"encoding/hex"
@@ -154,6 +155,10 @@ func main() {
 
 				// we can also set working dir...
 				// cmd.Dir = ...
+				var out bytes.Buffer
+
+				cmd.Stdout = &out
+				cmd.Stderr = &out
 
 				if err := cmd.Start(); err != nil {
 					log.Printf("failed to run `%s` script with error: %v\n", script, err)
@@ -162,6 +167,7 @@ func main() {
 
 				if err := cmd.Wait(); err != nil {
 					log.Printf("`%s` script failed with error: %v\n", script, err)
+					log.Printf("`````````````\n%s\n`````````````\n", out)
 				}
 			}
 		}
