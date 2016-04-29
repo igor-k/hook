@@ -1,0 +1,9 @@
+{
+    "igor-k/hook": {
+        "master": "/full/path/to/script.sh",
+        "dev": "/full/path/to/another/script.sh"
+    },
+    "igor-k/repo": {
+        "master": "/full/path/to/script.sh",
+    }
+}
