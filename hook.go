@@ -147,6 +147,8 @@ func main() {
 		if config, ok := configs[ev.Repo.FullName]; ok {
 			ref := strings.TrimPrefix(ev.Ref, "refs/heads/")
 
+			log.Printf("got a push event: %s, %s, %s\n", ev.Repo.FullName, ref, ev.After)
+
 			if script, ok := config[ref]; ok {
 				cmd := exec.Command(script, ev.Repo.SshURL, ref, ev.After)
 
@@ -167,9 +169,13 @@ func main() {
 
 	if certFile != "" && keyFile != "" {
 		log.Printf("[https] listening on %s\n", addr)
-		http.ListenAndServeTLS(addr, certFile, keyFile, nil)
+		if err := http.ListenAndServeTLS(addr, certFile, keyFile, nil); err != nil {
+			log.Fatal(err)
+		}
 	} else {
 		log.Printf("[http] listening on %s\n", addr)
-		http.ListenAndServe(addr, nil)
+		if err := http.ListenAndServe(addr, nil); err != nil {
+			log.Fatal(err)
+		}
 	}
 }
